@@ -33,7 +33,25 @@ with open('day8.dat') as datafile:
         
         memchars = len(thisstring)
         totalmemchars += memchars
-        
 
 print("Code chars = {0}, mem chars = {1}, diff = {2}".format(totalcodechars,totalmemchars,totalcodechars-totalmemchars))
     
+
+print("Part Two")
+re_slash = re.compile(r'\\')
+totalcodechars = 0
+totalencodedchars = 0
+        
+with open('day8.dat') as datafile:
+    
+    for thisstring in datafile:
+        thisstring = thisstring.rstrip()
+        totalcodechars += len(thisstring)
+        
+        thisstring = thisstring[1:-1] # remove starting/ending quotes, as they can screw up things like "hey\\"
+        thisstring = re_slash.sub(r'\\\\', thisstring)
+        thisstring = re_test2.sub(r'\\\\"', thisstring)
+        totalencodedchars += len(thisstring)+4+2
+    
+print("Code chars = {0}, encoded chars = {1}, diff = {2}".format(totalcodechars,totalencodedchars,totalencodedchars-totalcodechars))
+# 1815 low, 2090 high, 2085 just right
