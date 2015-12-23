@@ -24,4 +24,5 @@ All code is in Python 3.
 * Day 16 - Matching item properties
 * Day 17 - Brute-force (looping via looped itertools) searching for combinations that match target volume
 * Day 18 - Game-Of-Life.  Implemented with numpy arrays within a class.  Example of iterating over numpy arrays.
+* Day 19 - Rule-based text replacement (developing a "molecule").  Part 1 was straightfoward, but for Part 2 my brute-force approach didn't work, and due to a lack of analysis, I resorted to this solution:  https://www.reddit.com/r/adventofcode/comments/3xflz8/day_19_solutions/cy4h7ji
 
