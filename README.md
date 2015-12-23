@@ -23,4 +23,5 @@ All code is in Python 3.
 * Day 15 - Integer optimization, brute force.
 * Day 16 - Matching item properties
 * Day 17 - Brute-force (looping via looped itertools) searching for combinations that match target volume
+* Day 18 - Game-Of-Life.  Implemented with numpy arrays within a class.  Example of iterating over numpy arrays.
 
