@@ -27,3 +27,5 @@ All code is in Python 3.
 * Day 19 - Rule-based text replacement (developing a "molecule").  Part 1 was straightfoward, but for Part 2 my brute-force approach didn't work, and due to a lack of analysis, I resorted to this solution:  https://www.reddit.com/r/adventofcode/comments/3xflz8/day_19_solutions/cy4h7ji
 * Day 20 - Integer factorization.
 * Day 21 - RPG simulation, brute force 
+* Day 22
+* Day 23 - Instruction set
