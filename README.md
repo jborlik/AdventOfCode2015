@@ -29,3 +29,4 @@ All code is in Python 3.
 * Day 21 - RPG simulation, brute force 
 * Day 22
 * Day 23 - Instruction set
+* Day 24 - Partition boxes.  Did this the slow way... In retrospect, I could have tried the combinations of boxes starting in the first partition, and stopped after I found the lowest count.
