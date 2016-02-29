@@ -21,11 +21,13 @@ if __name__ == "__main__":
     """Day24:  Balancing"""
 
     packages = []
-    with open('day24.dat') as datafile:
-        
+    with open('day24.dat') as datafile:        
         for thisstring in datafile:
             packages.append(int(thisstring))
 
+    # another way of doing this:
+    #packages = map(int, [line.strip("\n") for line in open('day24.dat')])
+    # from:  https://www.reddit.com/r/adventofcode/comments/3y1s7f/day_24_solutions/
 
     bestfirstcount = 10000
     bestqe = 100000000000
