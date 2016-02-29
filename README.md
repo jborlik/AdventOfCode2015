@@ -30,3 +30,4 @@ All code is in Python 3.
 * Day 22
 * Day 23 - Instruction set
 * Day 24 - Partition boxes.  Did this the slow way... In retrospect, I could have tried the combinations of boxes starting in the first partition, and stopped after I found the lowest count.
+* Day 25 - Use a generator function to find a "code number"
