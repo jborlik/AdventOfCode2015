@@ -26,18 +26,21 @@ spells = [ \
     Spell("Poison",        173, 2, 6, 3, 0, 0, 0), \
     Spell("Recharge",      229, 3, 5, 0, 0, 0, 100) ]
 
+bestwin = None
+
 class Gamestate:
     def __init__(self, nextActionID):
-        self.hero_hp = 50
-        self.hero_mana = 500
-        self.hero_armor = 1
+        self.hero_hp = 50 # 10 # 50
+        self.hero_mana = 500 # 250 # 500
+        self.hero_armor = 0
         self.spentmana = 0
-        self.boss_hp = 55
+        self.boss_hp = 55 # 14 # 55
         self.boss_damage = 8
         self.round = 0
         self.activeeffects = [0,0,0]   # shield, poison, recharge
         self.nextAction = spells[nextActionID]
         self.actionsTaken = [nextActionID]
+        self.ishardmode = 1
 
     def setNextAction(self,nextSpellID):
         self.nextAction = spells[nextSpellID]
@@ -45,7 +48,7 @@ class Gamestate:
 
     def applyEffects(self):
         #   apply effects for player
-        self.hero_armor = 1
+        self.hero_armor = 0
         for i in range(0,3):
             if (self.activeeffects[i] > 0):
                 self.hero_armor = self.hero_armor + spells[i+2].armor
@@ -54,9 +57,11 @@ class Gamestate:
                 self.activeeffects[i] = self.activeeffects[i] - 1
 
 
-    def isGameOver(self,bestwin):
-        if (self.hero_hp <= 0) or (self.hero_mana < 53):
+    def isGameOver(self):
+        global bestwin
+        if (self.hero_hp <= 0):
             # no, you lost.  Nothing to queue
+            #print("Lose, after {} rounds".format(self.round));
             return True
         if (self.boss_hp <= 0):
             # yes, you won!  
@@ -70,28 +75,37 @@ class Gamestate:
         return False
 
 
-    def doTurnAndQueueNext(self,actionqueue,bestwin):
+    def doTurnAndQueueNext(self,actionqueue):
+        global bestwin
         self.round = self.round + 1
         # first apply the current actions
         # player turn:
+
+        if self.ishardmode ==1:
+            self.hero_hp = self.hero_hp - 1
+            if self.isGameOver():
+                return
+
         self.applyEffects()
-        if self.isGameOver(bestwin):
+        if self.isGameOver():
             return
 
         # do the action
         if (self.hero_mana < self.nextAction.cost):
+            #print("Stopping this chain, as there isn't enough mana to execute the chosen action")
             return
         self.hero_mana = self.hero_mana - self.nextAction.cost
         self.spentmana = self.spentmana + self.nextAction.cost
         if (bestwin != None) and (self.spentmana > bestwin.spentmana):
             # why go on, as this will not be better than the best
+            #print("Stopping as bestwin spentmana={} while this activity has spentmana={}".format(bestwin.spentmana, self.spentmana))
             return
 
         if (self.nextAction.effectid == 0):
             # instantaneous
             self.hero_hp = self.hero_hp + self.nextAction.heal
-            self.boss_hp = self.boss_hp + self.nextAction.damage
-            if self.isGameOver(bestwin):
+            self.boss_hp = self.boss_hp - self.nextAction.damage
+            if self.isGameOver():
                 return
         else:
             # start an effect
@@ -102,11 +116,11 @@ class Gamestate:
 
         # boss turns:
         self.applyEffects()
-        if self.isGameOver(bestwin):
+        if self.isGameOver():
             return
 
         self.hero_hp = self.hero_hp - max(self.boss_damage - self.hero_armor, 1)
-        if self.isGameOver(bestwin):
+        if self.isGameOver():
             return
 
         # what can happen next?
@@ -142,14 +156,28 @@ if __name__ == "__main__":
     for i in range(0,len(spells)):
         actionqueue.append(Gamestate(i))
 
-    print(actionqueue)
-
     # okay, we are ready to breadth-first search
-    bestwin = None
 
+    itercount = 0
     while (len(actionqueue)>0):
-        thisState = actionqueue.pop()
-        thisState.doTurnAndQueueNext(actionqueue,bestwin)
+        itercount = itercount + 1
+        thisState = actionqueue.pop(0)
+        thisState.doTurnAndQueueNext(actionqueue)
+        # print("Iter {}: actions = {}".format(itercount,thisState.actionsTaken))
+        if (itercount % 100 == 0):
+            print("ITERATION {}, queue length {}".format(itercount, len(actionqueue)), end='' )
+            if (bestwin==None):
+                print(".  No win yet")
+            else:
+                print(".  Bestwin at {} mana".format(bestwin.spentmana))
 
 
+    if (bestwin != None):
+        print("*** COMPLETE.  Bestwin at {} mana, {} rounds, actions: {}".format(bestwin.spentmana, bestwin.round, bestwin.actionsTaken))
+    else:
+        print("*** COMPLETE. No winning solutions found!")
 
+
+        #for part two: 
+        # (computed) 1295 is too (high?)
+        #  1242 is too low (1295-53)
