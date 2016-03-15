@@ -40,7 +40,7 @@ class Gamestate:
         self.activeeffects = [0,0,0]   # shield, poison, recharge
         self.nextAction = spells[nextActionID]
         self.actionsTaken = [nextActionID]
-        self.ishardmode = 1
+        self.ishardmode = 1   # part 1 =0, part 2=1
 
     def setNextAction(self,nextSpellID):
         self.nextAction = spells[nextSpellID]
@@ -96,10 +96,6 @@ class Gamestate:
             return
         self.hero_mana = self.hero_mana - self.nextAction.cost
         self.spentmana = self.spentmana + self.nextAction.cost
-        if (bestwin != None) and (self.spentmana > bestwin.spentmana):
-            # why go on, as this will not be better than the best
-            #print("Stopping as bestwin spentmana={} while this activity has spentmana={}".format(bestwin.spentmana, self.spentmana))
-            return
 
         if (self.nextAction.effectid == 0):
             # instantaneous
@@ -111,6 +107,11 @@ class Gamestate:
             # start an effect
             self.activeeffects[self.nextAction.effectid - 1] = self.nextAction.duration
             # i would assert(self.activeffects[effectid-1] == 0)
+
+        if (bestwin != None) and (self.spentmana > bestwin.spentmana):
+            # why go on, as this will not be better than the best
+            #print("Stopping as bestwin spentmana={} while this activity has spentmana={}".format(bestwin.spentmana, self.spentmana))
+            return
 
         self.nextAction = None
 
@@ -131,9 +132,10 @@ class Gamestate:
         gs2 = copy.deepcopy(self)
         gs2.setNextAction(1)
         actionqueue.append(gs2)
-        # I can only do effect spells if they aren't working now
+        # I can only do effect spells if they aren't in operation.
+        # Note that I can recast the spell if it runs out in the next player turn
         for i in range(0,3):
-            if (self.activeeffects[i] == 0):
+            if (self.activeeffects[i] <= 1):
                 gsi = copy.deepcopy(self)
                 gsi.setNextAction(i+2)
                 actionqueue.append(gsi)

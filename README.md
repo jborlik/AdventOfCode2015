@@ -27,7 +27,10 @@ All code is in Python 3.
 * Day 19 - Rule-based text replacement (developing a "molecule").  Part 1 was straightfoward, but for Part 2 my brute-force approach didn't work, and due to a lack of analysis, I resorted to this solution:  https://www.reddit.com/r/adventofcode/comments/3xflz8/day_19_solutions/cy4h7ji
 * Day 20 - Integer factorization.
 * Day 21 - RPG simulation, brute force 
-* Day 22
+* Day 22 - RPG/wizard simulation, game state queued up and searched over
 * Day 23 - Instruction set
 * Day 24 - Partition boxes.  Did this the slow way... In retrospect, I could have tried the combinations of boxes starting in the first partition, and stopped after I found the lowest count.
 * Day 25 - Use a generator function to find a "code number"
+
+
+I completed all of the puzzles on 2016 March 14.
